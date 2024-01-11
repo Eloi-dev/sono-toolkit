@@ -1,8 +1,8 @@
 {
   "name": "Sono Toolkit",
   "short_name": "Sono Toolkit",
-  "theme_color": "#fefefe",
-  "background_color": "#fefefe",
+  "theme_color": "#424242",
+  "background_color": "#424242",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
