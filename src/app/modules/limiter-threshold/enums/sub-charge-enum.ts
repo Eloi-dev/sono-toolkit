@@ -1,0 +1,4 @@
+export enum SubChargeEnum {
+  CLOSE = 'LIMITER.ENUMS.SUB_CHARGE.CLOSE',
+  OPEN = 'LIMITER.ENUMS.SUB_CHARGE.OPEN'
+}

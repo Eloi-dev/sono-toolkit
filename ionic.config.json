@@ -1,0 +1,7 @@
+{
+  "name": "sono-toolkit",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

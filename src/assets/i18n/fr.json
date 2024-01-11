@@ -1,0 +1,31 @@
+{
+  "LIMITER": {
+    "TITLE": "Limiteur",
+    "FIELDS": {
+      "TYPE": "Type de limiteur",
+      "CHARGE": "Type de charge",
+      "IMPEDANCE": "Impédance",
+      "HP_POWER": "Puissance HP",
+      "AMPLI_POWER": "Puissance ampli",
+      "AMPLI_GAIN": "Gain ampli",
+      "LIMITER": "Limiteur"
+    },
+    "SAVE_ALERT": {
+      "LABEL": "Nom de la configuration"
+    },
+    "MODAL": {
+      "TITLE": "Réglages sauvegardés",
+      "CLOSE": "Fermer"
+    },
+    "BUTTONS": {
+      "COMPUTE": "Calculer",
+      "SAVE": "Sauvegarder",
+      "RESET": "Réinitialiser"
+    }
+  },
+  "SHARED": {
+    "ERRORS": {
+      "REQUIRED": "Ce champ est requis."
+    }
+  }
+}

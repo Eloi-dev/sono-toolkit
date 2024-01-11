@@ -1,0 +1,248 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title size="large">{{ 'LIMITER.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="open-modal">
+        <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-md="6" size-sm="6" size-xs="12">
+        <ion-card class="ion-no-margin">
+          <form [formGroup]="limiterForm" (ngSubmit)="compute()" (change)="limiterForm.get('limiter')?.setValue(0)" novalidate>
+            <ion-card-header>
+              <ion-card-title>
+                <div class="full-width" style="display: flex; justify-content: space-between">
+                  <span>Calculatrice</span>
+                  <ion-buttons slot="end" class="ion-hide-md-up">
+                    <ion-button (click)="isTutorialModalOpen = true">
+                      <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+                    </ion-button>
+                  </ion-buttons>
+                </div>
+              </ion-card-title>
+              <ion-card-subtitle>Limiteur</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+
+              <ion-item class="custom">
+                <ion-select [label]="'LIMITER.FIELDS.TYPE' | translate" aria-label="Type" interface="popover"
+                            placeholder="Select type"
+                            formControlName="type"
+                            (ionChange)="limiterForm.get('limiter')?.setValue(0)">
+                  <ion-select-option value="dbu">dBu</ion-select-option>
+                  <ion-select-option value="tracks_ds2-4">T.Racks DS2/4</ion-select-option>
+                  <ion-select-option value="dcx_2496_sub">DCX2496 Sub</ion-select-option>
+                  <ion-select-option value="dcx_2496_top">DCX2496 Top</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item class="custom">
+                <ion-select [label]="'LIMITER.FIELDS.CHARGE' | translate" interface="popover"
+                            placeholder="Select charge"
+                            formControlName="charge"
+                            (ionChange)="limiterForm.get('limiter')?.setValue(0)">
+                  <ion-select-option value="open">Ouverte</ion-select-option>
+                  <ion-select-option value="close">Fermée</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item class="custom">
+                <ion-input
+                  [label]="'LIMITER.FIELDS.IMPEDANCE' | translate"
+                  formControlName="impedance" type="number"
+                  required="true"
+                  [readonly]="currentLimiter | async"
+                  [errorText]="validations.impedance[0].message | translate"
+                >
+                  <div slot="end">
+                    <span>Ohms</span>
+                  </div>
+                </ion-input>
+              </ion-item>
+              <ion-item class="custom">
+                <ion-input
+                  [label]="'LIMITER.FIELDS.HP_POWER' | translate"
+                  formControlName="hpPower"
+                  type="number"
+                  required="true"
+                  [readonly]="currentLimiter | async"
+                  [errorText]="validations.impedance[0].message | translate"
+                >
+                  <div slot="end">
+                    <span>W AES</span>
+                  </div>
+                </ion-input>
+              </ion-item>
+              <ion-item class="custom">
+                <ion-input
+                  [label]="'LIMITER.FIELDS.AMPLI_POWER' | translate"
+                  type="number"
+                  formControlName="ampliPower"
+                  required="true"
+                  [readonly]="currentLimiter | async"
+                  [errorText]="validations.impedance[0].message | translate"
+                >
+                  <div slot="end">
+                    <span>W RMS</span>
+                  </div>
+                </ion-input>
+              </ion-item>
+              <ion-item class="custom" lines="none">
+                <ion-input
+                  [label]="'LIMITER.FIELDS.AMPLI_GAIN' | translate"
+                  type="number"
+                  formControlName="ampliGain"
+                  required="true"
+                  [readonly]="currentLimiter | async"
+                  [errorText]="validations.impedance[0].message | translate"
+                >
+                  <div slot="end">
+                    <span>dB</span>
+                  </div>
+                </ion-input>
+              </ion-item>
+              <ion-item class="custom ion-margin-top" lines="none">
+                <ion-label></ion-label>
+                <ion-input
+                  [label]="'LIMITER.FIELDS.LIMITER' | translate"
+                  formControlName="limiter"
+                  readonly="true"
+                >
+                  <div slot="end">
+                    <span>{{ limiterForm.get('type')?.value === 'dbu' ? 'dBu' : 'dB' }}</span>
+                  </div>
+                </ion-input>
+              </ion-item>
+            </ion-card-content>
+            <div *ngIf="(currentLimiter | async) === undefined" class="full-width" style="display: flex; justify-content: space-between">
+              <ion-button [disabled]="!limiterForm.valid" type="submit" fill="clear" (click)="compute()">{{'LIMITER.BUTTONS.COMPUTE' | translate}}</ion-button>
+              <ion-button id="present-alert" fill="clear"
+                          [disabled]="!limiterForm.get('limiter')?.value">
+                {{'LIMITER.BUTTONS.SAVE' | translate}}
+              </ion-button>
+            </div>
+            <div *ngIf="(currentLimiter | async)" class="full-width" style="display: flex; justify-content: space-between">
+              <ion-button fill="clear" (click)="resetLimiter()">
+                {{'LIMITER.BUTTONS.RESET' | translate}}
+              </ion-button>
+            </div>
+          </form>
+        </ion-card>
+      </ion-col>
+      <ion-col size-md="6" size-sm="6" size-xs="12" class="ion-hide-sm-down">
+        <div>
+          <h4>Mode d'emploi</h4>
+          <p>Utilisation de la calculatrice :</p>
+          <ul>
+            <li>
+              <p>Type de limiteur : nom du processeur limiteur</p>
+            </li>
+            <li>
+              <p>Type de charge : le type de charge <strong>ouvert</strong> ou <strong>fermé</strong></p>
+            </li>
+            <li>
+              <p>Impédance : impédance du HP (en Ohms)</p>
+            </li>
+            <li>
+              <p>Puissance HP : puissance admise par le HP (en Watt)</p>
+            </li>
+            <li>
+              <p>Puissance Ampli : puissance de l'amplification (en Watt)</p>
+            </li>
+            <li>
+              <p>Gain Ampli : gain max de l'ampli (en dB)</p>
+            </li>
+          </ul>
+          <p><strong>Calculer</strong> pour afficher le résultat.</p>
+          <p><strong>Sauvegarder</strong> pour sauver la calculatrice.</p>
+          <p><strong>Réinitialiser</strong> pour retirer les paramètres chargés.</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-alert
+    *ngIf="(currentLimiter | async) === undefined"
+    trigger="present-alert"
+    [header]="'LIMITER.SAVE_ALERT.LABEL' | translate"
+    [buttons]="alertButtons"
+    [inputs]="alertInputs"
+  ></ion-alert>
+
+  <ion-modal trigger="open-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{'LIMITER.MODAL.TITLE' | translate}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cancel()">{{'LIMITER.MODAL.CLOSE' | translate}}</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list [inset]="true">
+          <ion-item-sliding *ngFor="let limiter of limiterList | async">
+            <ion-item [button]="true" (click)="selectLimiter(limiter)">
+              <ion-label>
+                {{ limiter.name }}
+              </ion-label>
+            </ion-item>
+            <ion-item-options>
+              <ion-item-option (click)="drop(limiter)" color="danger" expandable="true">
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+        <ion-note class="ion-padding">Glisser à gauche pour supprimer</ion-note>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isTutorialModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button (click)="isTutorialModalOpen = false">{{'LIMITER.MODAL.CLOSE' | translate}}</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div>
+          <h4>Mode d'emploi</h4>
+          <p>Utilisation de la calculatrice :</p>
+          <ul>
+            <li>
+              <p>Type de limiteur : nom du processeur limiteur</p>
+            </li>
+            <li>
+              <p>Type de charge : le type de charge <strong>ouvert</strong> ou <strong>fermé</strong></p>
+            </li>
+            <li>
+              <p>Impédance : impédance du HP (en Ohms)</p>
+            </li>
+            <li>
+              <p>Puissance HP : puissance admise par le HP (en Watt)</p>
+            </li>
+            <li>
+              <p>Puissance Ampli : puissance de l'amplification (en Watt)</p>
+            </li>
+            <li>
+              <p>Gain Ampli : gain max de l'ampli (en dB)</p>
+            </li>
+          </ul>
+          <p><strong>Calculer</strong> pour afficher le résultat.</p>
+          <p><strong>Sauvegarder</strong> pour sauver et retrouver ces paramètres.</p>
+          <p><strong>Réinitialiser</strong> pour retirer les paramètres chargés.</p>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
