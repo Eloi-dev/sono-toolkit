@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "Sono Toolkit",
+  "short_name": "sono-toolkit",
   "theme_color": "#4b9b3e",
   "background_color": "#fafafa",
   "display": "standalone",
