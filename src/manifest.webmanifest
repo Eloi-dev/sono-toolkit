@@ -1,4 +1,11 @@
 {
+  "name": "app",
+  "short_name": "app",
+  "theme_color": "#4b9b3e",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
   "icons": [
     {
       "src": "assets/icons/icon-48.webp",
